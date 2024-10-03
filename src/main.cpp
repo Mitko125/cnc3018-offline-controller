@@ -73,7 +73,9 @@ using Detector = GrblDetector<WatchedSerial, SerialCNC, createGrbl >;
 DetectorScreen<Detector> detUI;
 
 void setup() {
+#ifdef USB_SERIAL
     SerialUSB.begin(115200);
+#endif
     //SerialCNC.begin(115200);
 
     _u8g2.begin();
@@ -138,11 +140,11 @@ void loop() {
 
     if(dev!=nullptr) dev->loop();
     else Detector::loop();
-
+#ifdef USB_SERIAL
     if(SerialUSB.available()) {
         while(SerialUSB.available()) {
             SerialCNC.write(SerialUSB.read());
         }
     }
-
+#endif
 }
